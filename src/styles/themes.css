@@ -1,0 +1,43 @@
+.theme-green {
+  --accent: #8fcba4;
+  --accent-strong: #2f7d4e;
+  --accent-soft: rgb(143 203 164 / 12%);
+}
+
+.dark.theme-green {
+  --accent: #8fcba4;
+  --accent-strong: #a7d9b8;
+}
+
+.theme-teal {
+  --accent: #7ccbc3;
+  --accent-strong: #237a74;
+  --accent-soft: rgb(124 203 195 / 12%);
+}
+
+.dark.theme-teal {
+  --accent: #7ccbc3;
+  --accent-strong: #9ddbd5;
+}
+
+.theme-orange {
+  --accent: #e58b6e;
+  --accent-strong: #a84728;
+  --accent-soft: rgb(229 139 110 / 12%);
+}
+
+.dark.theme-orange {
+  --accent: #e58b6e;
+  --accent-strong: #f09b7f;
+}
+
+.theme-blue {
+  --accent: #8fb4e8;
+  --accent-strong: #3c6fae;
+  --accent-soft: rgb(143 180 232 / 12%);
+}
+
+.dark.theme-blue {
+  --accent: #8fb4e8;
+  --accent-strong: #a8c6ee;
+}
