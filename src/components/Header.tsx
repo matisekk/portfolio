@@ -9,7 +9,7 @@ const Header = () => {
         <header className="fixed top-0 right-0 left-0 z-50 md:left-[40%]">
             <div className="relative flex h-16 w-full items-center px-6 lg:px-8">
                 <a
-                    href="#home"
+                    href="#about"
                     className="text-lg font-semibold tracking-tight text-(--foreground)"
                 >
                     MP<span className="text-(--accent)">.</span>

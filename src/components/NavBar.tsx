@@ -3,10 +3,9 @@ import classNames from 'classnames';
 import { useActiveSection } from '../hooks/useActiveSection';
 
 const navItems = [
-    { label: 'Home', href: '#home' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Stack', href: '#stack' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'about', href: '#about' },
+    { label: 'projects', href: '#projects' },
+    { label: 'contact', href: '#contact' },
 ];
 
 const NavBar = () => {

@@ -1,21 +1,21 @@
 export const themes = {
     green: {
-        name: 'Green',
+        name: 'Grove',
         color: '#8FCBA4',
         image: '/themes/green.webp',
     },
     teal: {
-        name: 'Teal',
+        name: 'Tide',
         color: '#7CCBC3',
         image: '/themes/teal.webp',
     },
     orange: {
-        name: 'Orange',
+        name: 'Flow',
         color: '#E58B6E',
         image: '/themes/orange.webp',
     },
     blue: {
-        name: 'Blue',
+        name: 'Frost',
         color: '#8FB4E8',
         image: '/themes/blue.webp',
     },

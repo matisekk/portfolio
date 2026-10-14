@@ -8,16 +8,23 @@ import { useAccentTheme } from "./hooks/useAccentTheme";
 const App = () => {
   const { accentTheme, setAccentTheme } = useAccentTheme();
 
-  const currentTheme = themes[accentTheme];
   return (
     <>
       {/* LEFT */}
       <div className="fixed inset-y-0 left-0 hidden w-[40%] md:block">
-        <img
-          src={currentTheme.image}
-          alt=""
-          className="h-full w-full object-cover"
-        />
+        {Object.entries(themes).map(([key, theme]) => (
+          <img
+            key={key}
+            src={theme.image}
+            alt=""
+            className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-in-out
+            ${accentTheme === key
+                ? 'scale-100 opacity-100'
+                : 'scale-[1.02] opacity-0'
+              }
+              `}
+          />
+        ))}
       </div>
 
       <ThemeSwitcher
