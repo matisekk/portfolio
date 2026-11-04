@@ -9,11 +9,11 @@ const stack = [
     'Playwright',
 ];
 
-const Hero = () => {
+const About = () => {
     return (
         <section
             id="about"
-            className="flex min-h-screen flex-col justify-center px-8 lg:px-12 xl:px-16"
+            className="flex h-full items-center px-6 md:px-10 xl:px-14"
         >
             <div className="max-w-xl">
                 <p className="mb-4 text-sm text-(--accent)">
@@ -68,4 +68,4 @@ const Hero = () => {
     );
 };
 
-export default Hero;
+export default About;
