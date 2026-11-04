@@ -1,3 +1,5 @@
+/* GREEN / GROVE */
+
 .theme-green {
   --accent: #8fcba4;
   --accent-strong: #2f7d4e;
@@ -5,9 +7,24 @@
 }
 
 .dark.theme-green {
+  --background: #111613;
+  --surface: #181f1b;
+  --surface-hover: #202822;
+
+  --foreground: #e4ebe6;
+  --foreground-secondary: #bec8c1;
+  --muted: #8d9a92;
+
+  --border: #242c27;
+  --border-strong: #364139;
+
   --accent: #8fcba4;
   --accent-strong: #a7d9b8;
+  --accent-foreground: #111613;
 }
+
+
+/* TEAL / TIDE */
 
 .theme-teal {
   --accent: #7ccbc3;
@@ -16,9 +33,24 @@
 }
 
 .dark.theme-teal {
+  --background: #101616;
+  --surface: #172020;
+  --surface-hover: #1e2929;
+
+  --foreground: #e3ebea;
+  --foreground-secondary: #bdc9c7;
+  --muted: #8b9a98;
+
+  --border: #232d2c;
+  --border-strong: #354341;
+
   --accent: #7ccbc3;
   --accent-strong: #9ddbd5;
+  --accent-foreground: #101616;
 }
+
+
+/* ORANGE / FLOW */
 
 .theme-orange {
   --accent: #e58b6e;
@@ -27,9 +59,24 @@
 }
 
 .dark.theme-orange {
+  --background: #171411;
+  --surface: #201b18;
+  --surface-hover: #29221e;
+
+  --foreground: #ebe7e4;
+  --foreground-secondary: #c9c0bb;
+  --muted: #9b918b;
+
+  --border: #2d2723;
+  --border-strong: #40362f;
+
   --accent: #e58b6e;
   --accent-strong: #f09b7f;
+  --accent-foreground: #171411;
 }
+
+
+/* BLUE / FROST */
 
 .theme-blue {
   --accent: #8fb4e8;
@@ -38,8 +85,20 @@
 }
 
 .dark.theme-blue {
+  --background: #111419;
+  --surface: #171c23;
+  --surface-hover: #1e252e;
+
+  --foreground: #e5e9ef;
+  --foreground-secondary: #bdc5d0;
+  --muted: #8f98a5;
+
+  --border: #242b35;
+  --border-strong: #343e4c;
+
   --accent: #8fb4e8;
   --accent-strong: #a8c6ee;
+  --accent-foreground: #111419;
 }
 
 .theme-name-in {
