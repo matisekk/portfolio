@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
-const sectionIds = ['home', 'projects', 'stack', 'contact'];
+const sectionIds = ['about', 'projects', 'contact'];
 
 export const useActiveSection = () => {
-    const [activeSection, setActiveSection] = useState('home');
+    const [activeSection, setActiveSection] = useState('about');
 
     useEffect(() => {
         const sections = sectionIds
