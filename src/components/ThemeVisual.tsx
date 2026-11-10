@@ -20,8 +20,7 @@ const EDGE_GLOW_BLUR = 12;
 const EDGE_GLOW_OPACITY = 0.32;
 const EDGE_UPDATE_INTERVAL = 40;
 
-const FADE_DELAY = 8000;
-const FADE_DURATION = 14000;
+const REVEAL_EXIT_DURATION = 450;
 
 const ThemeVisual = ({
     image,
@@ -96,8 +95,7 @@ const ThemeVisual = ({
                 startedAt: performance.now(),
             };
 
-            resetMaskRef.current = true;
-            edgeDirtyRef.current = true;
+            edgeDirtyRef.current = false;
 
             setHasInteracted(false);
         };
@@ -154,12 +152,6 @@ const ThemeVisual = ({
 
         let animationFrame = 0;
 
-        let lastFrameTime =
-            performance.now();
-
-        let lastInteractionTime =
-            performance.now();
-
         let lastEdgeUpdate = 0;
 
         let hasPainted = false;
@@ -180,6 +172,29 @@ const ThemeVisual = ({
             min: number,
             max: number,
         ) => Math.min(Math.max(value, min), max);
+
+        const getRevealOpacity = (time: number) => {
+            const transition = transitionRef.current;
+
+            if (!transition.active) {
+                return 1;
+            }
+
+            const progress = clamp(
+                (time - transition.startedAt) /
+                REVEAL_EXIT_DURATION,
+                0,
+                1,
+            );
+
+            /*
+             * Smooth ease-out instead of linear fade.
+             */
+            const eased =
+                progress * progress * (3 - 2 * progress);
+
+            return 1 - eased;
+        };
 
         const noise = (
             x: number,
@@ -224,6 +239,45 @@ const ThemeVisual = ({
                 nextHeight === height
             ) {
                 return;
+            }
+
+            /*
+             * Save the current reveal mask before resizing.
+             *
+             * Changing canvas.width / canvas.height clears
+             * the canvas automatically.
+             */
+            let savedMask:
+                | HTMLCanvasElement
+                | null = null;
+
+            const hadPaintedMask =
+                hasPainted &&
+                width > 0 &&
+                height > 0;
+
+            if (hadPaintedMask) {
+                savedMask =
+                    document.createElement(
+                        'canvas',
+                    );
+
+                savedMask.width =
+                    maskCanvas.width;
+
+                savedMask.height =
+                    maskCanvas.height;
+
+                const savedContext =
+                    savedMask.getContext('2d');
+
+                if (savedContext) {
+                    savedContext.drawImage(
+                        maskCanvas,
+                        0,
+                        0,
+                    );
+                }
             }
 
             width = nextWidth;
@@ -294,13 +348,6 @@ const ThemeVisual = ({
                 0,
             );
 
-            maskContext.clearRect(
-                0,
-                0,
-                width,
-                height,
-            );
-
             revealContext.clearRect(
                 0,
                 0,
@@ -315,9 +362,52 @@ const ThemeVisual = ({
                 height,
             );
 
-            hasPainted = false;
+            /*
+             * Restore the previous mask scaled to the
+             * new canvas dimensions.
+             */
+            if (
+                savedMask &&
+                hadPaintedMask
+            ) {
+                maskContext.save();
+
+                maskContext.drawImage(
+                    savedMask,
+
+                    0,
+                    0,
+                    savedMask.width,
+                    savedMask.height,
+
+                    0,
+                    0,
+                    width,
+                    height,
+                );
+
+                maskContext.restore();
+
+                /*
+                 * Keep the reveal alive.
+                 */
+                hasPainted = true;
+            } else {
+                maskContext.clearRect(
+                    0,
+                    0,
+                    width,
+                    height,
+                );
+
+                hasPainted = false;
+            }
 
             edgeDirtyRef.current = true;
+
+            /*
+             * Do NOT reset the mask after resize.
+             */
             resetMaskRef.current = false;
         };
 
@@ -592,14 +682,16 @@ const ThemeVisual = ({
             if (finished) {
                 transition.active = false;
 
-                previousImageRef.current =
-                    null;
+                previousImageRef.current = null;
 
-                resetMaskRef.current =
-                    true;
+                /*
+                 * The reveal is already visually faded to zero,
+                 * so clearing it now is invisible.
+                 */
+                resetMaskRef.current = true;
+                edgeDirtyRef.current = true;
 
-                edgeDirtyRef.current =
-                    true;
+                setHasInteracted(false);
             }
         };
 
@@ -722,8 +814,6 @@ const ThemeVisual = ({
 
             edgeDirtyRef.current = true;
 
-            lastInteractionTime =
-                performance.now();
         };
 
         const paintLine = (
@@ -775,84 +865,15 @@ const ThemeVisual = ({
             }
         };
 
-        const fadeMask = (
+        const updateEdgeGlow = (
             time: number,
-            deltaTime: number,
         ) => {
             if (
-                !hasPainted ||
-                pointer.down ||
                 transitionRef.current.active
             ) {
                 return;
             }
 
-            const idleTime =
-                time -
-                lastInteractionTime;
-
-            if (
-                idleTime <
-                FADE_DELAY
-            ) {
-                return;
-            }
-
-            const amount =
-                1 -
-                Math.exp(
-                    -deltaTime /
-                    FADE_DURATION,
-                );
-
-            maskContext.save();
-
-            maskContext.globalCompositeOperation =
-                'destination-out';
-
-            maskContext.fillStyle =
-                `rgba(0,0,0,${amount})`;
-
-            maskContext.fillRect(
-                0,
-                0,
-                width,
-                height,
-            );
-
-            maskContext.restore();
-
-            edgeDirtyRef.current = true;
-
-            if (
-                idleTime >
-                FADE_DELAY +
-                FADE_DURATION *
-                2.5
-            ) {
-                maskContext.clearRect(
-                    0,
-                    0,
-                    width,
-                    height,
-                );
-
-                edgeContext.clearRect(
-                    0,
-                    0,
-                    width,
-                    height,
-                );
-
-                hasPainted = false;
-
-                edgeDirtyRef.current = false;
-            }
-        };
-
-        const updateEdgeGlow = (
-            time: number,
-        ) => {
             if (
                 !edgeDirtyRef.current ||
                 time -
@@ -936,15 +957,38 @@ const ThemeVisual = ({
             lastEdgeUpdate = time;
         };
 
-        const drawReveal = () => {
+        const drawReveal = (time: number) => {
             const current =
                 currentImageRef.current;
 
+            const previous =
+                previousImageRef.current;
+
             if (
                 !current ||
-                transitionRef.current.active ||
                 !hasPainted
             ) {
+                return;
+            }
+
+            const transition =
+                transitionRef.current;
+
+            /*
+             * During theme transition we keep revealing
+             * the OLD image for a short moment and smoothly
+             * fade it out.
+             */
+            const revealImage =
+                transition.active &&
+                    previous
+                    ? previous
+                    : current;
+
+            const opacity =
+                getRevealOpacity(time);
+
+            if (opacity <= 0.001) {
                 return;
             }
 
@@ -962,7 +1006,7 @@ const ThemeVisual = ({
 
             drawImage(
                 revealContext,
-                current,
+                revealImage,
             );
 
             revealContext.restore();
@@ -989,11 +1033,12 @@ const ThemeVisual = ({
             revealContext.restore();
 
             /*
-             * Subtle bloom.
+             * Bloom.
              */
             context.save();
 
-            context.globalAlpha = 0.14;
+            context.globalAlpha =
+                0.14 * opacity;
 
             context.filter =
                 'blur(7px) brightness(1.2) saturate(1.2)';
@@ -1014,6 +1059,14 @@ const ThemeVisual = ({
 
             context.restore();
 
+            /*
+             * Main reveal.
+             */
+            context.save();
+
+            context.globalAlpha =
+                opacity;
+
             context.drawImage(
                 revealCanvas,
 
@@ -1027,6 +1080,8 @@ const ThemeVisual = ({
                 width,
                 height,
             );
+
+            context.restore();
         };
 
         const drawCursor = () => {
@@ -1134,14 +1189,6 @@ const ThemeVisual = ({
         const draw = (
             time: number,
         ) => {
-            const deltaTime =
-                Math.min(
-                    time -
-                    lastFrameTime,
-                    50,
-                );
-
-            lastFrameTime = time;
 
             if (
                 width <= 1 ||
@@ -1198,11 +1245,6 @@ const ThemeVisual = ({
                 resetMaskRef.current = false;
             }
 
-            fadeMask(
-                time,
-                deltaTime,
-            );
-
             context.clearRect(
                 0,
                 0,
@@ -1214,17 +1256,23 @@ const ThemeVisual = ({
                 time,
             );
 
-            drawReveal();
+            drawReveal(time);
 
             updateEdgeGlow(
                 time,
             );
 
+            const revealOpacity =
+                getRevealOpacity(time);
+
             if (
-                !transitionRef.current.active &&
-                hasPainted
+                hasPainted &&
+                revealOpacity > 0.001
             ) {
                 context.save();
+
+                context.globalAlpha =
+                    revealOpacity;
 
                 context.globalCompositeOperation =
                     'screen';
@@ -1345,9 +1393,6 @@ const ThemeVisual = ({
             event: PointerEvent,
         ) => {
             pointer.down = false;
-
-            lastInteractionTime =
-                performance.now();
 
             if (
                 canvas.hasPointerCapture(
