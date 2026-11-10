@@ -76,6 +76,7 @@ const ThemeSwitcher = ({ value, onChange }: ThemeSwitcherProps) => {
                 return (
                     <motion.div
                         key={themeKey}
+                        initial={false}
                         layout="position"
                         animate={{
                             height: isVisible ? 40 : 0,

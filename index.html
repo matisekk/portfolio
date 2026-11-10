@@ -1,13 +1,184 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>portfolio</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta name="theme-color" content="#111613" />
+
+  <!--
+      Critical styles before Vite / React / Tailwind.
+
+      The page is immediately stable.
+      Only ThemeVisual is allowed to appear later.
+    -->
+  <style>
+    :root {
+      --initial-background: #111613;
+      --initial-foreground: #e4ebe6;
+    }
+
+    html,
+    body,
+    #root {
+      margin: 0;
+      min-width: 100%;
+      min-height: 100%;
+    }
+
+    html,
+    body {
+      background: var(--initial-background);
+      color: var(--initial-foreground);
+    }
+
+    /*
+       * Prevent theme transitions during the
+       * first browser paint.
+       */
+    html.no-theme-transition,
+    html.no-theme-transition *,
+    html.no-theme-transition *::before,
+    html.no-theme-transition *::after {
+      transition: none !important;
+    }
+  </style>
+
+  <script>
+    (() => {
+      const root =
+        document.documentElement;
+
+      const mode =
+        localStorage.getItem('theme') ||
+        'dark';
+
+      const accentTheme =
+        localStorage.getItem(
+          'accent-theme',
+        ) || 'blue';
+
+      const darkBackgrounds = {
+        green: '#111613',
+        teal: '#101616',
+        orange: '#171411',
+        blue: '#111419',
+      };
+
+      const darkForegrounds = {
+        green: '#e4ebe6',
+        teal: '#e3ebea',
+        orange: '#ebe7e4',
+        blue: '#e5e9ef',
+      };
+
+      const themeImages = {
+        green:
+          '/themes/green.webp',
+        teal:
+          '/themes/teal.webp',
+        orange:
+          '/themes/orange.webp',
+        blue:
+          '/themes/blue.webp',
+      };
+
+      const isDark =
+        mode === 'dark';
+
+      const background =
+        isDark
+          ? (
+            darkBackgrounds[
+            accentTheme
+            ] ||
+            darkBackgrounds.green
+          )
+          : '#fafafa';
+
+      const foreground =
+        isDark
+          ? (
+            darkForegrounds[
+            accentTheme
+            ] ||
+            darkForegrounds.green
+          )
+          : '#18181b';
+
+      root.style.setProperty(
+        '--initial-background',
+        background,
+      );
+
+      root.style.setProperty(
+        '--initial-foreground',
+        foreground,
+      );
+
+      root.style.colorScheme =
+        isDark
+          ? 'dark'
+          : 'light';
+
+      root.classList.add(
+        'no-theme-transition',
+      );
+
+      if (isDark) {
+        root.classList.add(
+          'dark',
+        );
+      }
+
+      root.classList.add(
+        `theme-${accentTheme}`,
+      );
+
+      /*
+       * Start loading the CURRENT visual
+       * before React is downloaded.
+       */
+      const image =
+        themeImages[
+        accentTheme
+        ] ||
+        themeImages.blue;
+
+      const preload =
+        document.createElement(
+          'link',
+        );
+
+      preload.rel =
+        'preload';
+
+      preload.as =
+        'image';
+
+      preload.href =
+        image;
+
+      preload.setAttribute(
+        'fetchpriority',
+        'high',
+      );
+
+      document.head.appendChild(
+        preload,
+      );
+    })();
+  </script>
+
+  <title>Mateusz Przewoźnik</title>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

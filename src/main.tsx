@@ -8,3 +8,14 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>,
 )
+/*
+ * Initial page is already painted with the
+ * correct theme.
+ */
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    document.documentElement.classList.remove(
+      'no-theme-transition',
+    );
+  });
+});

@@ -1,6 +1,42 @@
 @import "tailwindcss";
 @import "./themes.css";
 
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #8FB4E8;
+}
+
+@property --background {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #111214;
+}
+
+@property --surface {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #17181b;
+}
+
+@property --foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f4f4f5;
+}
+
+@property --muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #8f9098;
+}
+
+@property --border {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #27282c;
+}
+
 :root {
   /* LIGHT */
   --background: #fafafa;
@@ -78,23 +114,26 @@ html {
   background: var(--background);
   color: var(--foreground);
   scroll-behavior: smooth;
-
+}
+/* transitions only after initial page load */
+html.app-ready {
   transition:
-    background-color 500ms ease,
-    color 300ms ease;
+    --accent 550ms ease,
+    --background 550ms ease,
+    --surface 500ms ease,
+    --surface-hover 500ms ease,
+    --foreground 300ms ease,
+    --foreground-secondary 300ms ease,
+    --muted 300ms ease,
+    --border 450ms ease,
+    --border-strong 450ms ease;
 }
 
 body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-
   background: var(--background);
   color: var(--foreground);
 
-  font-family: Arial, Helvetica, sans-serif;
-
   transition:
     background-color 500ms ease,
-    color 300ms ease;
+    color 350ms ease;
 }
