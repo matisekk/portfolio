@@ -8,6 +8,7 @@ import ThemeVisual from './components/ThemeVisual';
 import { themes } from './constants/themes';
 import { useAccentTheme } from './hooks/useAccentTheme';
 import { useSectionSound } from './hooks/useSectionSound';
+import { useHoverSounds } from './hooks/useHoverSounds';
 
 const sectionIds = [
   'about',
@@ -16,6 +17,7 @@ const sectionIds = [
 ];
 
 const App = () => {
+  useHoverSounds();
   useSectionSound(sectionIds);
   const { accentTheme, setAccentTheme } = useAccentTheme();
   const currentTheme = themes[accentTheme];

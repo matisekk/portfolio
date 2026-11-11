@@ -19,6 +19,7 @@ const NavBar = () => {
 
                 return (
                     <a
+                        data-sound-hover
                         key={href}
                         href={href}
                         className={classNames(

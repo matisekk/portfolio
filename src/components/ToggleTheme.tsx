@@ -19,6 +19,7 @@ const ToggleTheme = () => {
             <div className="hidden h-5 w-px bg-(--border) 2xl:block" />
 
             <button
+                data-sound-hover
                 type="button"
                 onClick={toggleTheme}
                 aria-label={

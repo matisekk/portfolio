@@ -90,6 +90,7 @@ const ThemeSwitcher = ({ value, onChange }: ThemeSwitcherProps) => {
                         }}
                     >
                         <motion.button
+                            data-sound-hover
                             type="button"
                             onClick={() =>
                                 isActive

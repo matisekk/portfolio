@@ -4,8 +4,27 @@ type UiSound =
     | 'theme-light'
     | 'theme-dark';
 
+const SOUND_STORAGE_KEY = 'ui-sounds-enabled';
+
 let audioContext: AudioContext | null = null;
-let audioUnlocked = false;
+
+let soundsEnabled =
+    localStorage.getItem(SOUND_STORAGE_KEY) !== 'false';
+
+export const areUiSoundsEnabled = () => {
+    return soundsEnabled;
+};
+
+export const setUiSoundsEnabled = (
+    enabled: boolean,
+) => {
+    soundsEnabled = enabled;
+
+    localStorage.setItem(
+        SOUND_STORAGE_KEY,
+        String(enabled),
+    );
+};
 
 const getAudioContext = () => {
     if (!audioContext) {
@@ -13,22 +32,6 @@ const getAudioContext = () => {
     }
 
     return audioContext;
-};
-
-export const unlockUiSounds = async () => {
-    const context = getAudioContext();
-
-    if (context.state === 'suspended') {
-        try {
-            await context.resume();
-        } catch {
-            return;
-        }
-    }
-
-    if (context.state === 'running') {
-        audioUnlocked = true;
-    }
 };
 
 const createTone = (
@@ -109,6 +112,10 @@ export const playSectionChangeSound = () => {
 export const playUiSound = async (
     sound: UiSound,
 ) => {
+    if (!soundsEnabled) {
+        return;
+    }
+
     const context = getAudioContext();
 
     if (context.state === 'suspended') {
@@ -123,16 +130,25 @@ export const playUiSound = async (
         return;
     }
 
-    audioUnlocked = true;
-
     switch (sound) {
         case 'hover':
             createTone(
                 context,
-                520,
+                720,
+                0.055,
+                0.012,
+                'sine',
+            );
+
+            createTone(
+                context,
+                920,
                 0.045,
+                0.006,
+                'sine',
                 0.018,
             );
+
             break;
 
         case 'click':
