@@ -1,128 +1,28 @@
-import { useEffect } from 'react';
+import Header from "./components/Header";
+import PageSections from "./components/PageSections";
+import ThemeBackground from "./components/ThemeBackgroud";
 
-import About from './components/About';
-import Divider from './components/Divider';
-import Header from './components/Header';
-import ThemeSwitcher from './components/ThemeSwitcher';
-import ThemeVisual from './components/ThemeVisual';
-import { themes } from './constants/themes';
-import { useAccentTheme } from './hooks/useAccentTheme';
-import { useSectionSound } from './hooks/useSectionSound';
-import { useHoverSounds } from './hooks/useHoverSounds';
+import { useAccentTheme } from "./hooks/useAccentTheme";
+import { useHoverSounds } from "./hooks/useHoverSounds";
+import { usePreloadThemeImages } from "./hooks/usePreloadThemeImages";
+import { useSectionSound } from "./hooks/useSectionSound";
 
-const sectionIds = [
-  'about',
-  'projects',
-  'contact',
-];
+const sectionIds = ["about", "projects", "contact"];
 
 const App = () => {
   useHoverSounds();
   useSectionSound(sectionIds);
+  usePreloadThemeImages();
+
   const { accentTheme, setAccentTheme } = useAccentTheme();
-  const currentTheme = themes[accentTheme];
-
-  /*
-   * Current image is already preloaded in index.html.
-   * This makes the remaining theme changes instant.
-   */
-  useEffect(() => {
-    Object.values(themes).forEach((theme) => {
-      const img = new Image();
-
-      img.decoding = 'async';
-      img.src = theme.image;
-    });
-  }, []);
 
   return (
     <div className="h-dvh overflow-hidden">
       <Header />
 
-      {/* MOBILE / TABLET VISUAL */}
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden md:hidden">
-        {Object.entries(themes).map(([key, theme]) => (
-          <img
-            key={key}
-            src={theme.image}
-            alt=""
-            draggable={false}
-            decoding="async"
-            className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-in-out ${accentTheme === key
-              ? 'scale-100 opacity-20'
-              : 'scale-[1.02] opacity-0'
-              }`}
-          />
-        ))}
-      </div>
+      <ThemeBackground accentTheme={accentTheme} onThemeChange={setAccentTheme} />
 
-      {/* DESKTOP VISUAL */}
-      <div
-        className="
-          fixed inset-y-0 left-0
-          hidden w-[40%]
-          overflow-hidden
-          bg-(--background)
-          md:block
-        "
-      >
-        <ThemeVisual
-          image={currentTheme.image}
-          color={currentTheme.color}
-        />
-      </div>
-
-      <Divider
-        orientation="vertical"
-        className="fixed inset-y-0 left-[40%] z-40 hidden md:block"
-      />
-
-      <ThemeSwitcher
-        value={accentTheme}
-        onChange={setAccentTheme}
-      />
-
-      {/* AMBIENT BACKGROUND */}
-      <div
-        className="
-          ambient-background
-          pointer-events-none
-          fixed inset-0 z-5
-          md:left-[40%]
-        "
-      />
-
-      {/* SCROLLABLE CONTENT */}
-      <main
-        data-scroll-container
-        className="
-          fixed top-16 right-0 bottom-0 left-0 z-10
-          snap-y snap-mandatory
-          overflow-y-auto overscroll-contain
-          md:left-[40%]
-        "
-      >
-        <section
-          id="about"
-          className="h-full snap-start snap-always"
-        >
-          <About />
-        </section>
-
-        <section
-          id="projects"
-          className="flex h-full snap-start snap-always items-center"
-        >
-          Projects
-        </section>
-
-        <section
-          id="contact"
-          className="flex h-full snap-start snap-always items-center"
-        >
-          Contact
-        </section>
-      </main>
+      <PageSections />
     </div>
   );
 };
