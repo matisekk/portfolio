@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 
 import { useActiveSection } from '../hooks/useActiveSection';
+import { playNavigationClickSound } from '../utils/uiSounds';
 
 const navItems = [
     { label: 'about', href: '#about' },
@@ -26,6 +27,7 @@ const NavBar = () => {
                                 ? 'text-(--foreground)'
                                 : 'text-(--muted) hover:text-(--foreground)',
                         )}
+                        onClick={playNavigationClickSound}
                     >
                         {label}
 

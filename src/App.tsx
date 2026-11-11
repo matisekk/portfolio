@@ -7,10 +7,17 @@ import ThemeSwitcher from './components/ThemeSwitcher';
 import ThemeVisual from './components/ThemeVisual';
 import { themes } from './constants/themes';
 import { useAccentTheme } from './hooks/useAccentTheme';
+import { useSectionSound } from './hooks/useSectionSound';
+
+const sectionIds = [
+  'about',
+  'projects',
+  'contact',
+];
 
 const App = () => {
+  useSectionSound(sectionIds);
   const { accentTheme, setAccentTheme } = useAccentTheme();
-
   const currentTheme = themes[accentTheme];
 
   /*
@@ -85,6 +92,7 @@ const App = () => {
 
       {/* SCROLLABLE CONTENT */}
       <main
+        data-scroll-container
         className="
           fixed top-16 right-0 bottom-0 left-0 z-10
           snap-y snap-mandatory

@@ -3,6 +3,7 @@ import { MenuIcon } from 'lucide-react';
 import NavBar from './NavBar';
 import ToggleTheme from './ToggleTheme';
 import Divider from './Divider';
+import { playNavigationClickSound } from '../utils/uiSounds';
 
 const Header = () => {
     return (
@@ -11,6 +12,7 @@ const Header = () => {
                 <a
                     href="#about"
                     className="text-lg font-semibold tracking-tight text-(--foreground)"
+                    onClick={playNavigationClickSound}
                 >
                     MP<span className="text-(--accent)">.</span>
                 </a>
@@ -22,6 +24,7 @@ const Header = () => {
                         type="button"
                         className="flex items-center justify-center sm:hidden"
                         aria-label="Open menu"
+                        onClick={playNavigationClickSound}
                     >
                         <MenuIcon size={20} />
                     </button>
