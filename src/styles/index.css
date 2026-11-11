@@ -4,7 +4,7 @@
 @property --accent {
   syntax: "<color>";
   inherits: true;
-  initial-value: #8FB4E8;
+  initial-value: #8fb4e8;
 }
 
 @property --background {
@@ -151,10 +151,18 @@ html.app-ready {
 }
 
 body {
+  font-family: "Space Grotesk Variable", sans-serif;
   background: var(--background);
   color: var(--foreground);
 
   transition:
     background-color 500ms ease,
     color 350ms ease;
+}
+
+.font-mono {
+  font-family: "Geist Mono Variable", monospace;
+}
+.font-typewriter {
+  font-family: "IBM Plex Mono", monospace;
 }

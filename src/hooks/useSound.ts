@@ -1,33 +1,27 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-    areUiSoundsEnabled,
-    playUiSound,
-    setUiSoundsEnabled,
-} from '../utils/uiSounds';
+import { areUiSoundsEnabled, playUiSound, setUiSoundsEnabled } from "../utils/uiSounds";
 
 export const useSound = () => {
-    const [enabled, setEnabled] = useState(
-        areUiSoundsEnabled,
-    );
+  const [enabled, setEnabled] = useState(areUiSoundsEnabled);
 
-    const toggleSound = () => {
-        const nextEnabled = !enabled;
+  const toggleSound = () => {
+    const nextEnabled = !enabled;
 
-        if (!nextEnabled) {
-            void playUiSound('click');
-        }
+    if (!nextEnabled) {
+      void playUiSound("click");
+    }
 
-        setUiSoundsEnabled(nextEnabled);
-        setEnabled(nextEnabled);
+    setUiSoundsEnabled(nextEnabled);
+    setEnabled(nextEnabled);
 
-        if (nextEnabled) {
-            void playUiSound('click');
-        }
-    };
+    if (nextEnabled) {
+      void playUiSound("click");
+    }
+  };
 
-    return {
-        soundEnabled: enabled,
-        toggleSound,
-    };
+  return {
+    soundEnabled: enabled,
+    toggleSound,
+  };
 };
