@@ -1,7 +1,7 @@
 import classNames from "classnames";
 
 import { useActiveSection } from "../hooks/useActiveSection";
-import { playNavigationClickSound } from "../utils/uiSounds";
+import { useSmoothSectionNavigation } from "../hooks/useSmoothSectionNavigation";
 
 const navItems = [
   { label: "about", href: "#about" },
@@ -11,11 +11,14 @@ const navItems = [
 
 const NavBar = () => {
   const activeSection = useActiveSection();
+  const { navigateToSection } = useSmoothSectionNavigation();
 
   return (
     <nav className="absolute left-1/2 z-10 hidden h-full -translate-x-1/2 items-center gap-8 sm:flex">
       {navItems.map(({ label, href }) => {
-        const isActive = href === `#${activeSection}`;
+        const sectionId = href.replace("#", "");
+
+        const isActive = sectionId === activeSection;
 
         return (
           <a
@@ -26,7 +29,7 @@ const NavBar = () => {
               "relative flex h-full items-center text-sm transition-colors",
               isActive ? "text-(--foreground)" : "text-(--muted) hover:text-(--foreground)",
             )}
-            onClick={playNavigationClickSound}
+            onClick={(event) => navigateToSection(event, sectionId)}
           >
             {label}
 

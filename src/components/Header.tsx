@@ -5,8 +5,11 @@ import ToggleTheme from "./ToggleTheme";
 import Divider from "./Divider";
 import { playNavigationClickSound } from "../utils/uiSounds";
 import ToggleSound from "./ToggleSound";
+import { useSmoothSectionNavigation } from "../hooks/useSmoothSectionNavigation";
 
 const Header = () => {
+  const { navigateToSection } = useSmoothSectionNavigation();
+
   return (
     <header className="fixed top-0 right-0 left-0 z-50 md:left-[40%]">
       <div className="relative flex h-16 w-full items-center px-6 lg:px-8">
@@ -14,7 +17,7 @@ const Header = () => {
           data-sound-hover
           href="#about"
           className="text-lg font-semibold tracking-tight text-(--foreground)"
-          onClick={playNavigationClickSound}
+          onClick={(event) => navigateToSection(event, "about")}
         >
           {/* SMALLER SCREENS */}
           <span className="xl:hidden">
