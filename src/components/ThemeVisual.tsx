@@ -680,16 +680,42 @@ const ThemeVisual = ({
             context.restore();
 
             if (finished) {
-                transition.active = false;
+                /*
+                 * Clear the old reveal BEFORE marking the
+                 * transition as finished.
+                 *
+                 * Otherwise one frame can render the new theme
+                 * together with the previous reveal / glow.
+                 */
+                maskContext.clearRect(
+                    0,
+                    0,
+                    width,
+                    height,
+                );
+
+                revealContext.clearRect(
+                    0,
+                    0,
+                    width,
+                    height,
+                );
+
+                edgeContext.clearRect(
+                    0,
+                    0,
+                    width,
+                    height,
+                );
+
+                hasPainted = false;
+
+                resetMaskRef.current = false;
+                edgeDirtyRef.current = false;
 
                 previousImageRef.current = null;
 
-                /*
-                 * The reveal is already visually faded to zero,
-                 * so clearing it now is invisible.
-                 */
-                resetMaskRef.current = true;
-                edgeDirtyRef.current = true;
+                transition.active = false;
 
                 setHasInteracted(false);
             }
@@ -1267,6 +1293,7 @@ const ThemeVisual = ({
 
             if (
                 hasPainted &&
+                !transitionRef.current.active &&
                 revealOpacity > 0.001
             ) {
                 context.save();
