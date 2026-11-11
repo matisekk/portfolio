@@ -21,5 +21,9 @@
     ".roo/**",
     ".windsurf/**",
     "tools/oxlint/anti-slop/**"
-  ]
+  ],
+  "sortTailwindcss": {
+    "stylesheet": "./src/styles/index.css",
+    "functions": ["classNames"]
+  }
 }
